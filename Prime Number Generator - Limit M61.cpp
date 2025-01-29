@@ -41,7 +41,7 @@ bool fermatTest(unsigned long long M_p, unsigned long long a = 3) {
     return powMod(a, M_p - 1, M_p) == 1;
 }
 
-// Lucas-Lehmer test to check to see if the found Fermat pseudoprimes are Mersenne primes
+// Lucas-Lehmer test to check to see if the found Fermat Pseudoprimes are Mersenne primes
 bool lucasLehmerTest(unsigned long long p) {
     if (p == 2)
         return true;
@@ -68,17 +68,13 @@ int main() {
             if (p < 64)
                 M_p = (1ULL << p) - 1;
             else {
-                // Skip p if it exceeds 63 to prevent overflow in 64-bit unsigned long long
+                // Skip if it exceeds 63 to prevent overflow in 64-bit (limit of unsigned long long, need GMP to bypass this problem)
                 continue;
             }
 
-            // Apply Fermat test with base a=3
+            // Do Fermat Primality test with base a=3
             if (fermatTest(M_p, 3)) {
-                // Add to candidates
-                // To ensure we collect the 10 latest, we can keep a buffer
-                // However, as we are searching sequentially, we'll collect and test immediately
-                // So break to test this candidate
-                // Apply Lucas-Lehmer test
+                // add to candidates and apply Lucas-Lehmer test
                 if (lucasLehmerTest(p)) {
                     mersennePrimes.push_back(M_p);
                     cout << "Mersenne Prime Found: M_" << p << " = " << M_p << endl;
@@ -90,12 +86,8 @@ int main() {
     }
 
     cout << "\nList of 10 Mersenne Primes found:" << endl;
-    for (size_t i = 0; i < mersennePrimes.size(); i++) {
-        unsigned long long p = 2;
-        // Find p corresponding to M_p
-        // Since we increment p sequentially and set last_p accordingly, we can track p
-        // Alternatively, store p along with M_p
-        // For simplicity, let's adjust the above code to store p as well
+    for (int i = 0; i < mersennePrimes.size(); i++) {
+        cout << "M_" << last_p << " = " << mersennePrimes[i].get_str() << endl;
     }
 
     return 0;
